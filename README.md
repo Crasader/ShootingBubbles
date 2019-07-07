@@ -1,7 +1,6 @@
 # Shooting Bubbles
 
-Google Play: [https://play.google.com/store/apps/details?id=com.lstudio.ShootingBubbles] (https://play.google.com/store/apps/details?id=com.lstudio.ShootingBubbles)
-
+Google Play: <https://play.google.com/store/apps/details?id=com.lstudio.ShootingBubbles>
 This game is made in Cocos2d-x game engine.
 How to use:
 1. Clone the project from github.
