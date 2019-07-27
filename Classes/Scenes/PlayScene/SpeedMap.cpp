@@ -1,17 +1,17 @@
-#include "BossMap.h"
+#include "SpeedMap.h"
+#include "../../Libs/GameLibrary.h"
 #include "SimpleAudioEngine.h"
-#include "GameLibrary.h"
 
 USING_NS_CC;
 
-BossMap::BossMap(){
+SpeedMap::SpeedMap(){
 
 }
-BossMap::~BossMap(){
+SpeedMap::~SpeedMap(){
 
 }
 
-bool BossMap::init(){
+bool SpeedMap::init(){
 
     if (!Layer::init()){
         return false;
@@ -39,23 +39,23 @@ bool BossMap::init(){
     scoreLabel->setColor(Color3B(88, 105, 132));
     this->addChild(scoreLabel, 10);
 
-    character = new Character(this, size, origin, characterColor, Constants::BOSS_MAP_ID);
+    character = new Character(this, size, origin, characterColor, Constants::SPEED_MAP_ID);
+
+    bubble = new Bubble(this, size, origin, true, Constants::SPEED_MAP_ID);
 
     bulletPackage = new BulletPackage(this, size, origin);
 
     infBulletPackage = new InfBulletPackage(this, size, origin);
 
-    bosses = new std::vector<Boss*>();
-
     gameOver = false;
     score = 0;
     timer = 0.0f;
 
-    characterBulletContactToBoss = false;
+    bubbleContactToCharacterBullet = false;
     characterContactToPackage = false;
 
     auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(BossMap::onContactBegin, this);
+    contactListener->onContactBegin = CC_CALLBACK_1(SpeedMap::onContactBegin, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     this->scheduleUpdate();
@@ -63,9 +63,8 @@ bool BossMap::init(){
     return true;
 }
 
-void BossMap::update(float delta){
+void SpeedMap::update(float delta){
     if (!gameOver){
-
         timer += delta;
 
         int direction = controller->getDirection();
@@ -103,6 +102,8 @@ void BossMap::update(float delta){
 
         character->update();
 
+        bubble->update(timer);
+
         bulletPackage->update();
 
         infBulletPackage->update(delta);
@@ -120,45 +121,16 @@ void BossMap::update(float delta){
         }
         else {}
 
-        //Boss ////////////////////////////////////////////////
-
-        //Append boss for full
-        while (bosses->size() < (Constants::BOSS_MAP_INIT_NUM + score / 100)){
-            bosses->push_back(new Boss(this, size, origin, true));
-        }
-
-        for (unsigned int i = 0; i < bosses->size(); ++i){
-            //Make bosses not go out screen
-            auto boss = bosses->at(i);
-            boss->update();
-
-            //Boss Shoot
-            if (bosses->at(i)->bulletIsEmpty()){
-                bosses->at(i)->shoot();
-                //Play soundtrack
-                if (SoundManager::isPlayingSoundtrack())
-                    SoundManager::playSoundtrack(SoundManager::BOSS_SHOOTING_AUDIO);
-            }
-
-            //Check if boss's hp = 0
-            if (boss->getHP() == 0){
-                //Play soundtrack
-                if (SoundManager::isPlayingSoundtrack())
-                    SoundManager::playSoundtrack(SoundManager::DIE_AUDIO);
-                boss->getBossSprite()->removeFromParent();
-                bosses->erase(bosses->begin() + i);
-                delete boss;
-                break;
-            }
-        }
-
         ///////////////////PHYSICS/////////////////////////////////
 
-        if (characterBulletContactToBoss){
-            PhysicsBody* bodyBullet = (bodyA->getCategoryBitmask() == Constants::CHARACTER_BULLET_CATEGORY_BITMASK)
+        if (bubbleContactToCharacterBullet){
+            PhysicsBody* bodyBubble = (bodyA->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK)
                                         ? bodyA : bodyB;
-            PhysicsBody* bodyBoss = (bodyA->getCategoryBitmask() == Constants::CHARACTER_BULLET_CATEGORY_BITMASK)
+            PhysicsBody* bodyBullet = (bodyA->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK)
                                         ? bodyB : bodyA;
+            //Update score's number to label, based in size of bubble
+            score += (Constants::BUBBLE_BIG_TAG - bodyBubble->getNode()->getTag() + 1) * 3;
+            scoreLabel->setString(std::to_string(score));
             //Delete bullet
             auto bulletShooted = bodyBullet->getNode();
             for (unsigned int i = 0; i < character->getBulletSet()->size(); ++i){
@@ -169,24 +141,25 @@ void BossMap::update(float delta){
                     break;
                 }
             }
-            //Decrease boss hp
-            auto bossShooted = bodyBoss->getNode();
-            for (unsigned int i = 0; i < bosses->size(); ++i){
-                auto bossMatched = bosses->at(i);
-                if (bossShooted == bossMatched->getBossSprite()){
-                    if (bossMatched->getHP() > 0){
-                        //Play soundtrack
-                        if (SoundManager::isPlayingSoundtrack())
-                            SoundManager::playSoundtrack(SoundManager::EXPLOSION_AUDIO);
-                        score += Constants::BOSS_SCORE;
-                        //Set score to scoreLabel
-                        scoreLabel->setString(std::to_string(score));
-                        bossMatched->setHP(bossMatched->getHP() - 1);
+            //Make bubble smaller or disappear
+            auto bubbleShooted = bodyBubble->getNode();
+            int bubbleSize = bodyBubble->getNode()->getTag();
+            for (unsigned int i = 0; i < bubble->getBubbleSet()->size(); ++i){
+                auto bubbleMatched = bubble->getBubbleSet()->at(i);
+                if (bubbleShooted == bubbleMatched){
+                    auto bubblePosition = bubbleShooted->getPosition();
+                    bubble->getBubbleSet()->erase(bubble->getBubbleSet()->begin() + i);
+                    bubbleShooted->removeFromParent();
+                    if (bubbleSize != Constants::BUBBLE_SMALL_TAG){
+                        bubble->startAddTwoBubble(bubblePosition, bubbleSize-1);
                     }
+                    //Play soundtrack
+                    if (SoundManager::isPlayingSoundtrack())
+                        SoundManager::playSoundtrack(SoundManager::EXPLOSION_AUDIO);
                     break;
                 }
             }
-            characterBulletContactToBoss = false;
+            bubbleContactToCharacterBullet = false;
         }
 
         if (characterContactToPackage){
@@ -203,6 +176,7 @@ void BossMap::update(float delta){
                 //Make package disappear and change it's direction
                 bodyPackage->getNode()->setPosition(origin.x + size.width * 1.25f,
                                                     origin.y + size.height * 0.5f);
+                bodyPackage->getNode()->stopAllActions();
                 Vec2 vecMovement = Vec2(RandomHelper::random_real(-Constants::PACKAGE_V, Constants::PACKAGE_V),
                                         RandomHelper::random_real(-Constants::PACKAGE_V, Constants::PACKAGE_V));
                 bodyPackage->getNode()->getPhysicsBody()->setVelocity(vecMovement);
@@ -226,8 +200,6 @@ void BossMap::update(float delta){
 
         Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(0);
         character->stop();
-        for (unsigned i = 0; i < bosses->size(); ++i)
-            bosses->at(i)->stop();
 
         this->unscheduleUpdate();
 
@@ -240,55 +212,44 @@ void BossMap::update(float delta){
     }
 }
 
-void BossMap::close(Ref* sender){
+void SpeedMap::close(Ref* sender){
     delete character;
+    delete bubble;
     delete bulletPackage;
     delete infBulletPackage;
-
-    while (!bosses->empty()){
-        auto firstBoss = bosses->at(0);
-        bosses->erase(bosses->begin());
-        delete firstBoss;
-    }
-    delete bosses;
 
     this->removeFromParentAndCleanup(true);
 }
 
-void BossMap::setController(ControlLayer* controller){
+void SpeedMap::setController(ControlLayer* controller){
     this->controller = controller;
 }
 
-bool BossMap::onContactBegin(cocos2d::PhysicsContact &contact){
+bool SpeedMap::onContactBegin(cocos2d::PhysicsContact &contact){
     PhysicsBody* bodyA = contact.getShapeA()->getBody();
     PhysicsBody* bodyB = contact.getShapeB()->getBody();
-    if ((bodyA->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK &&
+    if ((bodyA->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK &&
+        bodyB->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK) ||
+        (bodyB->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK &&
+        bodyA->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK)){
+            //Game over
+            gameOver = true;
+    }
+    else if ((bodyA->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK &&
+        bodyB->getCategoryBitmask() == Constants::CHARACTER_BULLET_CATEGORY_BITMASK) ||
+        (bodyA->getCategoryBitmask() == Constants::CHARACTER_BULLET_CATEGORY_BITMASK &&
+        bodyB->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK)){
+            this->bodyA = bodyA;
+            this->bodyB = bodyB;
+            bubbleContactToCharacterBullet = true;
+    }
+    else if ((bodyA->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK &&
         bodyB->getCategoryBitmask() == Constants::PACKAGE_CATEGORY_BITMASK) ||
         (bodyA->getCategoryBitmask() == Constants::PACKAGE_CATEGORY_BITMASK &&
         bodyB->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK)){
             this->bodyA = bodyA;
             this->bodyB = bodyB;
             characterContactToPackage = true;
-    }
-    else if ((bodyA->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK &&
-        bodyB->getCategoryBitmask() == Constants::BOSS_CATEGORY_BITMASK) ||
-        (bodyA->getCategoryBitmask() == Constants::BOSS_CATEGORY_BITMASK &&
-        bodyB->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK)){
-            gameOver = true;
-    }
-    else if ((bodyA->getCategoryBitmask() == Constants::CHARACTER_BULLET_CATEGORY_BITMASK &&
-        bodyB->getCategoryBitmask() == Constants::BOSS_CATEGORY_BITMASK) ||
-        (bodyA->getCategoryBitmask() == Constants::BOSS_CATEGORY_BITMASK &&
-        bodyB->getCategoryBitmask() == Constants::CHARACTER_BULLET_CATEGORY_BITMASK)){
-            this->bodyA = bodyA;
-            this->bodyB = bodyB;
-            characterBulletContactToBoss = true;
-    }
-    else if ((bodyA->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK &&
-        bodyB->getCategoryBitmask() == Constants::BOSS_BULLET_CATEGORY_BITMASK) ||
-        (bodyA->getCategoryBitmask() == Constants::BOSS_BULLET_CATEGORY_BITMASK &&
-        bodyB->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK)){
-            gameOver = true;
     }
     else {
     }

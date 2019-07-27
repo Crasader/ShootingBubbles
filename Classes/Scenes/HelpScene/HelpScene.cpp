@@ -24,10 +24,9 @@
 
 #include "HelpScene.h"
 #include "SimpleAudioEngine.h"
-#include "Constants.h"
 #include "ui/CocosGUI.h"
-#include "MenuScene.h"
-#include "GameLibrary.h"
+#include "../MenuScene/MenuScene.h"
+#include "../../Libs/GameLibrary.h"
 
 Scene* HelpScene::createScene()
 {

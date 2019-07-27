@@ -1,17 +1,17 @@
-#include "SpeedMap.h"
-#include "GameLibrary.h"
+#include "WindMillMap.h"
+#include "../../Libs/GameLibrary.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
-SpeedMap::SpeedMap(){
+WindMillMap::WindMillMap(){
 
 }
-SpeedMap::~SpeedMap(){
+WindMillMap::~WindMillMap(){
 
 }
 
-bool SpeedMap::init(){
+bool WindMillMap::init(){
 
     if (!Layer::init()){
         return false;
@@ -34,14 +34,16 @@ bool SpeedMap::init(){
     background->setPosition(origin.x + size.width / 2, origin.y + size.height / 2);
     this->addChild(background);
 
+    addWindMills();
+
     scoreLabel = Label::createWithTTF("0", Constants::DEFAULT_FONT_PATH, Constants::SCORE_FONT_SIZE);
     scoreLabel->setPosition(Vec2(origin.x + size.width / 2, origin.y + size.height * 0.8f));
     scoreLabel->setColor(Color3B(88, 105, 132));
     this->addChild(scoreLabel, 10);
 
-    character = new Character(this, size, origin, characterColor, Constants::SPEED_MAP_ID);
+    character = new Character(this, size, origin, characterColor, Constants::WINDMILL_MAP_ID);
 
-    bubble = new Bubble(this, size, origin, true, Constants::SPEED_MAP_ID);
+    bubble = new Bubble(this, size, origin, true, Constants::WINDMILL_MAP_ID);
 
     bulletPackage = new BulletPackage(this, size, origin);
 
@@ -55,7 +57,7 @@ bool SpeedMap::init(){
     characterContactToPackage = false;
 
     auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(SpeedMap::onContactBegin, this);
+    contactListener->onContactBegin = CC_CALLBACK_1(WindMillMap::onContactBegin, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     this->scheduleUpdate();
@@ -63,7 +65,7 @@ bool SpeedMap::init(){
     return true;
 }
 
-void SpeedMap::update(float delta){
+void WindMillMap::update(float delta){
     if (!gameOver){
         timer += delta;
 
@@ -129,7 +131,7 @@ void SpeedMap::update(float delta){
             PhysicsBody* bodyBullet = (bodyA->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK)
                                         ? bodyB : bodyA;
             //Update score's number to label, based in size of bubble
-            score += (Constants::BUBBLE_BIG_TAG - bodyBubble->getNode()->getTag() + 1) * 3;
+            score += (Constants::BUBBLE_BIG_TAG - bodyBubble->getNode()->getTag() + 1) * 4;
             scoreLabel->setString(std::to_string(score));
             //Delete bullet
             auto bulletShooted = bodyBullet->getNode();
@@ -195,8 +197,13 @@ void SpeedMap::update(float delta){
         //Game over
 
         //Play soundtrack
+
         if (SoundManager::isPlayingSoundtrack())
             SoundManager::playSoundtrack(SoundManager::DIE_AUDIO);
+
+        for (int i = 0; i < 2; i++){
+            this->getChildByTag(Constants::WINDMILL_ID + i)->stopAllActions();
+        }
 
         Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(0);
         character->stop();
@@ -212,7 +219,7 @@ void SpeedMap::update(float delta){
     }
 }
 
-void SpeedMap::close(Ref* sender){
+void WindMillMap::close(Ref* sender){
     delete character;
     delete bubble;
     delete bulletPackage;
@@ -221,11 +228,11 @@ void SpeedMap::close(Ref* sender){
     this->removeFromParentAndCleanup(true);
 }
 
-void SpeedMap::setController(ControlLayer* controller){
+void WindMillMap::setController(ControlLayer* controller){
     this->controller = controller;
 }
 
-bool SpeedMap::onContactBegin(cocos2d::PhysicsContact &contact){
+bool WindMillMap::onContactBegin(cocos2d::PhysicsContact &contact){
     PhysicsBody* bodyA = contact.getShapeA()->getBody();
     PhysicsBody* bodyB = contact.getShapeB()->getBody();
     if ((bodyA->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK &&
@@ -233,6 +240,13 @@ bool SpeedMap::onContactBegin(cocos2d::PhysicsContact &contact){
         (bodyB->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK &&
         bodyA->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK)){
             //Game over
+            gameOver = true;
+    }
+    else if ((bodyA->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK &&
+        bodyB->getCategoryBitmask() == Constants::WINDMILL_CATEGORY_BITMASK) ||
+        (bodyA->getCategoryBitmask() == Constants::WINDMILL_CATEGORY_BITMASK &&
+        bodyB->getCategoryBitmask() == Constants::CHARACTER_CATEGORY_BITMASK)){
+            // Game over
             gameOver = true;
     }
     else if ((bodyA->getCategoryBitmask() == Constants::BUBBLE_CATEGORY_BITMASK &&
@@ -254,4 +268,45 @@ bool SpeedMap::onContactBegin(cocos2d::PhysicsContact &contact){
     else {
     }
     return true;
+}
+
+void WindMillMap::addWindMills(){
+
+    for (int i = 0; i < 2; ++i){
+        auto windMill = Sprite::createWithSpriteFrameName(Constants::WINDMILL_PATH);
+        windMill->setPosition(origin.x + size.width * (0.25f + i * 0.5f), origin.y + size.height / 2);
+        windMill->setOpacity(80.0f);
+        windMill->setTag(Constants::WINDMILL_ID + i);
+        windMill->setScale(0.85f);
+
+        float windMillSize = windMill->getContentSize().width;
+
+        Vec2 physicsBodyPoints[] = {
+            Vec2(-windMillSize * 0.475f, 0.0f),
+            Vec2(0.0f, 0.0f),
+            Vec2(0.0f, windMillSize * 0.475f),
+            Vec2(0.0f, 0.0f),
+            Vec2(windMillSize * 0.475f, 0.0f),
+            Vec2(0.0f, 0.0f),
+            Vec2(0.0f, -windMillSize * 0.475f),
+            Vec2(0.0f, 0.0f),
+        };
+
+        auto physicsBody = PhysicsBody::createEdgePolygon(physicsBodyPoints, 8, PhysicsMaterial(1,1,0), windMillSize * 0.04f);
+        physicsBody->setContactTestBitmask(Constants::WINDMILL_COLLISION_BITMASK);
+        physicsBody->setCollisionBitmask(Constants::WINDMILL_COLLISION_BITMASK);
+        physicsBody->setCategoryBitmask(Constants::WINDMILL_CATEGORY_BITMASK);
+        windMill->setPhysicsBody(physicsBody);
+
+        int angle = RandomHelper::random_int(1, 89);
+        windMill->setRotation(angle);
+
+        float rotateSpeed = 2.0f + RandomHelper::random_int(0, 20) * 0.1;
+
+        auto rotate = RotateBy::create(rotateSpeed, 360.0f);
+        auto action = RepeatForever::create(rotate);
+        windMill->runAction(action);
+
+        this->addChild(windMill);
+    }
 }

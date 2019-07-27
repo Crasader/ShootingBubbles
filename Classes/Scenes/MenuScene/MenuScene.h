@@ -26,9 +26,9 @@
 
 #include "cocos2d.h"
 #include "MenuLayer.h"
-#include "Bubble.h"
+#include "../../Prefabs/Bubble/Bubble.h"
 /*
-#include "FirebaseHelper.h"
+#include "../../Libs/FirebaseHelper.h"
 
 #include "firebase/admob.h"
 #include "firebase/admob/types.h"

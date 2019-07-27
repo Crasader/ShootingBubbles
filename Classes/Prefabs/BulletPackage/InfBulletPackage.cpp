@@ -1,5 +1,5 @@
 #include "InfBulletPackage.h"
-#include "GameLibrary.h"
+#include "../../Libs/GameLibrary.h"
 
 InfBulletPackage::InfBulletPackage(Node* playLayer, Size size, Vec2 origin){
     this->playLayer = playLayer;

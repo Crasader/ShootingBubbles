@@ -1,7 +1,7 @@
 #include "MenuLayer.h"
-#include "GameLibrary.h"
-#include "PlayScene.h"
-#include "HelpScene.h"
+#include "../../Libs/GameLibrary.h"
+#include "../PlayScene/PlayScene.h"
+#include "../HelpScene/HelpScene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;

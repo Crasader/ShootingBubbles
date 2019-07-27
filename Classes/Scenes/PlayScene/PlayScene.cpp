@@ -1,13 +1,13 @@
 #include "PlayScene.h"
 #include "SimpleAudioEngine.h"
 
-#include "ControlLayer.h"
+#include "../../Libs/ControlLayer.h"
 #include "NormalMap.h"
 #include "SpeedMap.h"
 #include "WindMillMap.h"
 #include "BossMap.h"
 
-#include "GameLibrary.h"
+#include "../../Libs/GameLibrary.h"
 
 USING_NS_CC;
 

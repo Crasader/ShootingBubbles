@@ -1,7 +1,7 @@
 #include "EndLayer.h"
-#include "MenuScene.h"
+#include "../MenuScene/MenuScene.h"
 #include "SimpleAudioEngine.h"
-#include "GameLibrary.h"
+#include "../../Libs/GameLibrary.h"
 #include <ctime>
 
 USING_NS_CC;

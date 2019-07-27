@@ -2,11 +2,11 @@
 #define __WIND_MILL_MAP_H__
 
 #include "cocos2d.h"
-#include "ControlLayer.h"
-#include "Bubble.h"
-#include "Character.h"
-#include "BulletPackage.h"
-#include "InfBulletPackage.h"
+#include "../../Libs/ControlLayer.h"
+#include "../../Prefabs/Character/Character.h"
+#include "../../Prefabs/BulletPackage/BulletPackage.h"
+#include "../../Prefabs/BulletPackage/InfBulletPackage.h"
+#include "../../Prefabs/Bubble/Bubble.h"
 #include "EndLayer.h"
 #include <vector>
 

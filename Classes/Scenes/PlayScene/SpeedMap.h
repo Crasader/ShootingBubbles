@@ -1,49 +1,48 @@
-#ifndef __BOSS_MAP_H__
-#define __BOSS_MAP_H__
+#ifndef __SPEED_MAP_H__
+#define __SPEED_MAP_H__
 
 #include "cocos2d.h"
-#include "ControlLayer.h"
-#include "Character.h"
-#include "Boss.h"
-#include "BulletPackage.h"
-#include "InfBulletPackage.h"
+#include "../../Libs/ControlLayer.h"
+#include "../../Prefabs/Character/Character.h"
+#include "../../Prefabs/BulletPackage/BulletPackage.h"
+#include "../../Prefabs/BulletPackage/InfBulletPackage.h"
+#include "../../Prefabs/Bubble/Bubble.h"
 #include "EndLayer.h"
-#include "Boss.h"
 #include <vector>
 
 USING_NS_CC;
 
-class BossMap : public Layer
+class SpeedMap : public Layer
 
 {
 public:
-    BossMap();
-    ~BossMap();
+    SpeedMap();
+    ~SpeedMap();
 
     bool init() override;
     void update(float) override;
 
-    CREATE_FUNC(BossMap);
+    CREATE_FUNC(SpeedMap);
 
     void close(Ref* sender=nullptr);
 
     void setController(ControlLayer* controller);
 
 private:
+
     Size size;
     Vec2 origin;
 
+    Bubble* bubble;
     Character* character;
     BulletPackage* bulletPackage;
     InfBulletPackage* infBulletPackage;
-
-    std::vector<Boss*> *bosses;
 
     float timer;
     int score;
     bool gameOver;
 
-    bool characterBulletContactToBoss;
+    bool bubbleContactToCharacterBullet;
     bool characterContactToPackage;
 
     EndLayer* endLayer;

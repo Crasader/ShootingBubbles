@@ -23,10 +23,10 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
-#include "HelpScene.h"
-#include "MenuScene.h"
+#include "../HelpScene/HelpScene.h"
+#include "../MenuScene/MenuScene.h"
 #include "SimpleAudioEngine.h"
-#include "GameLibrary.h"
+#include "../../Libs/GameLibrary.h"
 
 USING_NS_CC;
 

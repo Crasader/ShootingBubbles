@@ -23,8 +23,8 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
-#include "GameLibrary.h"
+#include "Scenes/SplashScene/HelloWorldScene.h"
+#include "Libs/GameLibrary.h"
 #include "base/ZipUtils.h"
 /*
 #include "firebase/admob.h"
