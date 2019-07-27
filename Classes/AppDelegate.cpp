@@ -24,7 +24,7 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-##include "GameManager.h"
+#include "GameLibrary.h"
 #include "base/ZipUtils.h"
 /*
 #include "firebase/admob.h"

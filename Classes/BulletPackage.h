@@ -2,6 +2,7 @@
 #define __BULLET_PACKAGE_H__
 
 #include "cocos2d.h"
+#include "GameLibrary.h"
 
 USING_NS_CC;
 

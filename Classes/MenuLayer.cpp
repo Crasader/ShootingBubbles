@@ -28,21 +28,14 @@ bool MenuLayer::init(){
     overlay->setPosition(origin.x + size.width / 2, origin.y + size.height / 2);
     this->addChild(overlay);
 
-    isPlayingSoundtrack = true;
+    if (SoundManager::isPlayingBackgroundMusic() && !SoundManager::isPlayingBackgroundMusicCurrently())
+        SoundManager::playBackgroundMusic(SoundManager::BACKGROUND_MUSIC);
 
     DataManager* dataManager = new DataManager();
     if (dataManager->init()){
         top5Record = dataManager->getTop5Record();
-        bool isPlayingBackgroundMusic = dataManager->isBGMusicIsTurningOn();
-        isPlayingSoundtrack = dataManager->isAudioIsTurningOn();
-        //Play background music if ok
-        if (isPlayingBackgroundMusic && !CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
-            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
-                Constants::BACKGROUND_MUSIC.c_str(), true);
-
         dataManager->close();
     }
-
     delete dataManager;
 
     initSettingSprite();
@@ -86,9 +79,8 @@ void MenuLayer::initPlayButton(Size containerSize, ui::Button*& button){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BUTTON_CLICK_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                 //Change to Play Scene
                 auto nextScene = PlayScene::createScene();
                 auto transition = TransitionFade::create(1.0f, nextScene);
@@ -117,9 +109,8 @@ void MenuLayer::initSettingButton(Size containerSize, ui::Button*& button){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BUTTON_CLICK_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
 
                 //Play sprite is out
                 auto outAnimation = MoveTo::create(0.5f, Vec2(origin.x + size.width / 2, origin.y - size.height * 0.5f));
@@ -154,9 +145,8 @@ void MenuLayer::initStatsButton(Size containerSize, ui::Button*& button){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BUTTON_CLICK_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
 
                 //Play sprite is out
                 auto outAnimation = MoveTo::create(0.5f, Vec2(origin.x + size.width / 2, origin.y - size.height * 0.5f));
@@ -201,9 +191,8 @@ void MenuLayer::initSettingSprite(){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BUTTON_CLICK_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
 
                 //Stats sprite is out
                 auto outAnimation = MoveTo::create(0.5f, Vec2(origin.x + size.width / 2, origin.y - size.height * 0.5f));
@@ -334,9 +323,8 @@ void MenuLayer::initCharacterSkinTab(Node* container){
                 int currentPage = pageView->getCurrentPageIndex();
                 if (currentPage < Constants::NUM_OF_CHARACTER_SKIN - 1){
                     //Play sountrack
-                    if (isPlayingSoundtrack)
-                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                        Constants::BUTTON_CLICK_AUDIO.c_str());
+                    if (SoundManager::isPlayingSoundtrack())
+                        SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                     ++currentPage;
                     pageView->scrollToPage(currentPage);
                     previousSlideButton->setVisible(true);
@@ -375,9 +363,8 @@ void MenuLayer::initCharacterSkinTab(Node* container){
                 int currentPage = pageView->getCurrentPageIndex();
                 if (currentPage > 0){
                     //Play sountrack
-                    if (isPlayingSoundtrack)
-                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                        Constants::BUTTON_CLICK_AUDIO.c_str());
+                    if (SoundManager::isPlayingSoundtrack())
+                        SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                     --currentPage;
                     pageView->scrollToPage(currentPage);
                     nextSlideButton->setVisible(true);
@@ -515,9 +502,8 @@ void MenuLayer::initMapTab(Node* container){
                 int currentPage = pageView->getCurrentPageIndex();
                 if (currentPage < Constants::NUM_OF_MAP - 1){
                     //Play sountrack
-                    if (isPlayingSoundtrack)
-                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                        Constants::BUTTON_CLICK_AUDIO.c_str());
+                    if (SoundManager::isPlayingSoundtrack())
+                        SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                     ++currentPage;
                     pageView->scrollToPage(currentPage);
                     previousSlideButton->setVisible(true);
@@ -556,9 +542,8 @@ void MenuLayer::initMapTab(Node* container){
                 int currentPage = pageView->getCurrentPageIndex();
                 if (currentPage > 0){
                     //Play sountrack
-                    if (isPlayingSoundtrack)
-                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                        Constants::BUTTON_CLICK_AUDIO.c_str());
+                    if (SoundManager::isPlayingSoundtrack())
+                        SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                     --currentPage;
                     pageView->scrollToPage(currentPage);
                     nextSlideButton->setVisible(true);
@@ -660,13 +645,10 @@ void MenuLayer::initMusicTab(Node* container){
                 break;
             case ui::Widget::TouchEventType::ENDED:
             {
-                DataManager* dataManager = new DataManager();
-                if (dataManager->init()){
-                    isPlayingSoundtrack = !dataManager->isAudioIsTurningOn();
-                    dataManager->turnOnAudio(isPlayingSoundtrack);
-                    dataManager->close();
-                }
-                delete dataManager;
+                SoundManager::setPlayingSoundtrack(!SoundManager::isPlayingSoundtrack());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
+
                 break;
             }
             default:
@@ -699,22 +681,12 @@ void MenuLayer::initMusicTab(Node* container){
                 break;
             case ui::Widget::TouchEventType::ENDED:
             {
-                DataManager* dataManager = new DataManager();
-                if (dataManager->init()){
-                    bool isPlayingBackgroundMusic = dataManager->isBGMusicIsTurningOn();
-                    dataManager->turnOnBGMusic(!isPlayingBackgroundMusic);
-                    //Play background music after click ok
-                    if (!isPlayingBackgroundMusic)
-                        CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
-                            Constants::BACKGROUND_MUSIC.c_str(), true);
-                    else {
-                        //Turn off background music
-                        CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic();
-                    }
-                    dataManager->close();
+                SoundManager::setPlayingBackgroundMusic(!SoundManager::isPlayingBackgroundMusic());
+                if (SoundManager::isPlayingBackgroundMusic())
+                    SoundManager::playBackgroundMusic(SoundManager::BACKGROUND_MUSIC);
+                else {
+                    SoundManager::stopBackgroundMusic();
                 }
-                delete dataManager;
-
                 break;
             }
             default:
@@ -753,9 +725,8 @@ void MenuLayer::initInfoTab(Node* container){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BUTTON_CLICK_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
 
                 //Change to Help Scene
                 auto nextScene = HelpScene::createScene();
@@ -779,9 +750,8 @@ void MenuLayer::initInfoTab(Node* container){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BUTTON_CLICK_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                 Application::getInstance()->openURL(Constants::GAME_PRIVACY_POLICY_LINK);
                 break;
             }
@@ -818,9 +788,8 @@ void MenuLayer::initStatsSprite(){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BUTTON_CLICK_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
 
                 //Stats sprite is out
                 auto outAnimation = MoveTo::create(0.5f, Vec2(origin.x + size.width / 2, origin.y - size.height * 0.5f));

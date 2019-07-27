@@ -46,9 +46,6 @@ private:
     bool characterBulletContactToBoss;
     bool characterContactToPackage;
 
-    bool isPlayingSoundtrack;
-    bool isPlayingBackgroundMusic;
-
     EndLayer* endLayer;
 
     Label* scoreLabel;

@@ -17,6 +17,14 @@ void SoundManager::init(){
     audio->preloadEffect(SoundManager::BUTTON_CLICK_AUDIO.c_str());
 
     audio->preloadBackgroundMusic(SoundManager::BACKGROUND_MUSIC.c_str());
+
+    DataManager* dataManager = new DataManager();
+    if (dataManager->init()){
+        isPlaySoundtrack = dataManager->isAudioIsTurningOn();
+        isPlayBG = dataManager->isBGMusicIsTurningOn();
+        dataManager->close();
+    }
+    delete dataManager;
 }
 
 void SoundManager::playSoundtrack(std::string name){
@@ -38,10 +46,11 @@ void SoundManager::stopBackgroundMusic(){
 void SoundManager::setPlayingSoundtrack(bool isPlaying){
     DataManager* dataManager = new DataManager();
     if (dataManager->init()){
-        dataManager->turnOnSound(isPlaying);
+        dataManager->turnOnAudio(isPlaying);
         dataManager->close();
     }
     delete dataManager;
+    isPlaySoundtrack = isPlaying;
 }
 
 void SoundManager::setPlayingBackgroundMusic(bool isPlaying){
@@ -51,28 +60,15 @@ void SoundManager::setPlayingBackgroundMusic(bool isPlaying){
         dataManager->close();
     }
     delete dataManager;
+    isPlayBG = isPlaying;
 }
 
 bool SoundManager::isPlayingSoundtrack(){
-    bool isPlaying = true;
-    DataManager* dataManager = new DataManager();
-    if (dataManager->init()){
-        isPlaying = dataManager->isSoundIsTurningOn();
-        dataManager->close();
-    }
-    delete dataManager;
-    return isPlaying;
+    return isPlaySoundtrack;
 }
 
 bool SoundManager::isPlayingBackgroundMusic(){
-    bool isPlaying = true;
-    DataManager* dataManager = new DataManager();
-    if (dataManager->init()){
-        isPlaying = dataManager->isBGMusicIsTurningOn();
-        dataManager->close();
-    }
-    delete dataManager;
-    return isPlaying;
+    return isPlayBG;
 }
 
 bool SoundManager::isPlayingBackgroundMusicCurrently(){

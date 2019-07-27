@@ -12,6 +12,9 @@ namespace SoundManager{
     const std::string BACKGROUND_MUSIC = "audio/Background.mp3";
     const float AUDIO_VOLUME = 0.25f;
 
+    static bool isPlaySoundtrack;
+    static bool isPlayBG;
+
     void init();
 
     void playSoundtrack(std::string name);

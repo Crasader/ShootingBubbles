@@ -63,11 +63,10 @@ bool EndLayer::init(){
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Playing sountrack
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                 DataManager* dataManager = new DataManager();
                 if (dataManager->init()){
-                    if (dataManager->isAudioIsTurningOn())
-                        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                            Constants::BUTTON_CLICK_AUDIO.c_str());
                     //Increase playing time
                     dataManager->setCountPlayingTimes(dataManager->countPlayingTimes() + 1);
                     dataManager->close();

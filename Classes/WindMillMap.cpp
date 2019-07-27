@@ -25,8 +25,6 @@ bool WindMillMap::init(){
     DataManager* dataManager = new DataManager();
     if (dataManager->init()){
         characterColor = dataManager->getCharacterColor();
-        isPlayingSoundtrack = dataManager->isAudioIsTurningOn();
-        isPlayingBackgroundMusic = dataManager->isBGMusicIsTurningOn();
         dataManager->close();
     }
 
@@ -83,9 +81,8 @@ void WindMillMap::update(float delta){
                 //Update bullets's remain
                 controller->setBulletBarNum(character->getNumRemainBullets());
                 //Play soundtrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::SHOOTING_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::SHOOTING_AUDIO);
             }
             controller->setShooting(false);
         }
@@ -159,9 +156,8 @@ void WindMillMap::update(float delta){
                         bubble->startAddTwoBubble(bubblePosition, bubbleSize-1);
                     }
                     //Play soundtrack
-                    if (isPlayingSoundtrack)
-                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                        Constants::EXPLOSION_AUDIO.c_str());
+                    if (SoundManager::isPlayingSoundtrack())
+                        SoundManager::playSoundtrack(SoundManager::EXPLOSION_AUDIO);
                     break;
                 }
             }
@@ -172,9 +168,8 @@ void WindMillMap::update(float delta){
             PhysicsBody* bodyPackage = (bodyA->getCategoryBitmask() == Constants::PACKAGE_CATEGORY_BITMASK)
                                         ? bodyA : bodyB;
             //Play soundtrack
-            if (isPlayingSoundtrack)
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                Constants::ITEM_PICKUP_AUDIO.c_str());
+            if (SoundManager::isPlayingSoundtrack())
+                SoundManager::playSoundtrack(SoundManager::ITEM_PICKUP_AUDIO);
 
             if (bodyPackage->getNode()->getTag() == Constants::BULLET_PACKAGE_ID){
                 character->resetBulletSet();
@@ -203,9 +198,8 @@ void WindMillMap::update(float delta){
 
         //Play soundtrack
 
-        if (isPlayingSoundtrack)
-        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-            Constants::DIE_AUDIO.c_str());
+        if (SoundManager::isPlayingSoundtrack())
+            SoundManager::playSoundtrack(SoundManager::DIE_AUDIO);
 
         for (int i = 0; i < 2; i++){
             this->getChildByTag(Constants::WINDMILL_ID + i)->stopAllActions();

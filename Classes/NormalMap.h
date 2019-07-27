@@ -49,9 +49,6 @@ private:
 
     int bossLevel;
 
-    bool isPlayingSoundtrack;
-    bool isPlayingBackgroundMusic;
-
     EndLayer* endLayer;
 
     bool onContactBegin(cocos2d::PhysicsContact &contact);

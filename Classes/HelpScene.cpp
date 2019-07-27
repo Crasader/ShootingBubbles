@@ -77,15 +77,8 @@ bool HelpScene::init()
     this->addChild(buttonNext);
 
     //Play background music
-    DataManager* dataManager = new DataManager();
-    if (dataManager->init()){
-        //Play background music if ok
-        if (dataManager->isBGMusicIsTurningOn() && !CocosDenshion::SimpleAudioEngine::getInstance()->isBackgroundMusicPlaying())
-            CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic(
-                Constants::BACKGROUND_MUSIC.c_str(), true);
-        dataManager->close();
-    }
-    delete dataManager;
+    if (SoundManager::isPlayingBackgroundMusic() && !SoundManager::isPlayingBackgroundMusicCurrently())
+        SoundManager::playBackgroundMusic(SoundManager::BACKGROUND_MUSIC);
 
     initStage0();
 
@@ -95,15 +88,8 @@ bool HelpScene::init()
             case ui::Widget::TouchEventType::BEGAN:
             {
                 //Play sountrack
-                DataManager* dataManager = new DataManager();
-                if (dataManager->init()){
-                    //Play sountrack if ok
-                    if (dataManager->isAudioIsTurningOn())
-                    CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                        Constants::BUTTON_CLICK_AUDIO.c_str());
-                    dataManager->close();
-                }
-                delete dataManager;
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BUTTON_CLICK_AUDIO);
                 ++stage;
                 switch (stage){
                     case 1:

@@ -1,4 +1,4 @@
-#include "GameLibrary.h"
+#include "BossMap.h"
 #include "SimpleAudioEngine.h"
 #include "GameLibrary.h"
 
@@ -25,8 +25,6 @@ bool BossMap::init(){
     DataManager* dataManager = new DataManager();
     if (dataManager->init()){
         characterColor = dataManager->getCharacterColor();
-        isPlayingSoundtrack = dataManager->isAudioIsTurningOn();
-        isPlayingBackgroundMusic = dataManager->isBGMusicIsTurningOn();
         dataManager->close();
     }
 
@@ -82,9 +80,8 @@ void BossMap::update(float delta){
                 //Update bullets's remain
                 controller->setBulletBarNum(character->getNumRemainBullets());
                 //Play soundtrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::SHOOTING_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::SHOOTING_AUDIO);
             }
             controller->setShooting(false);
         }
@@ -139,17 +136,15 @@ void BossMap::update(float delta){
             if (bosses->at(i)->bulletIsEmpty()){
                 bosses->at(i)->shoot();
                 //Play soundtrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::BOSS_SHOOTING_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::BOSS_SHOOTING_AUDIO);
             }
 
             //Check if boss's hp = 0
             if (boss->getHP() == 0){
                 //Play soundtrack
-                if (isPlayingSoundtrack)
-                CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                    Constants::DIE_AUDIO.c_str());
+                if (SoundManager::isPlayingSoundtrack())
+                    SoundManager::playSoundtrack(SoundManager::DIE_AUDIO);
                 boss->getBossSprite()->removeFromParent();
                 bosses->erase(bosses->begin() + i);
                 delete boss;
@@ -181,9 +176,8 @@ void BossMap::update(float delta){
                 if (bossShooted == bossMatched->getBossSprite()){
                     if (bossMatched->getHP() > 0){
                         //Play soundtrack
-                        if (isPlayingSoundtrack)
-                        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                            Constants::EXPLOSION_AUDIO.c_str());
+                        if (SoundManager::isPlayingSoundtrack())
+                            SoundManager::playSoundtrack(SoundManager::EXPLOSION_AUDIO);
                         score += Constants::BOSS_SCORE;
                         //Set score to scoreLabel
                         scoreLabel->setString(std::to_string(score));
@@ -199,9 +193,8 @@ void BossMap::update(float delta){
             PhysicsBody* bodyPackage = (bodyA->getCategoryBitmask() == Constants::PACKAGE_CATEGORY_BITMASK)
                                         ? bodyA : bodyB;
             //Play soundtrack
-            if (isPlayingSoundtrack)
-            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-                Constants::ITEM_PICKUP_AUDIO.c_str());
+            if (SoundManager::isPlayingSoundtrack())
+                SoundManager::playSoundtrack(SoundManager::ITEM_PICKUP_AUDIO);
 
             if (bodyPackage->getNode()->getTag() == Constants::BULLET_PACKAGE_ID){
                 character->resetBulletSet();
@@ -228,9 +221,8 @@ void BossMap::update(float delta){
         //Game over
 
         //Play soundtrack
-        if (isPlayingSoundtrack)
-        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-            Constants::DIE_AUDIO.c_str());
+        if (SoundManager::isPlayingSoundtrack())
+            SoundManager::playSoundtrack(SoundManager::DIE_AUDIO);
 
         Director::getInstance()->getRunningScene()->getPhysicsWorld()->setSpeed(0);
         character->stop();

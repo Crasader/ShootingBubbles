@@ -40,8 +40,6 @@ private:
     void initMapTab(Node* container);
     void initMusicTab(Node* container);
     void initInfoTab(Node* container);
-
-    bool isPlayingSoundtrack;
 };
 
 #endif

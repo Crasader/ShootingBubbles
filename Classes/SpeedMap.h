@@ -42,9 +42,6 @@ private:
     int score;
     bool gameOver;
 
-    bool isPlayingSoundtrack;
-    bool isPlayingBackgroundMusic;
-
     bool bubbleContactToCharacterBullet;
     bool characterContactToPackage;
 
