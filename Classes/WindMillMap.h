@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 #include "ControlLayer.h"
-#include "Constants.h"
 #include "Bubble.h"
 #include "Character.h"
 #include "BulletPackage.h"

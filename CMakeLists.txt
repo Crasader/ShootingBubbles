@@ -75,7 +75,8 @@ list(APPEND GAME_SOURCE
      Classes/BossMap.cpp
      wxsqlite/sqlite3secure.c
      Classes/MyTabView.cpp
-     Classes/FirebaseHelper.cpp
+     Classes/SoundManager.cpp
+#     Classes/FirebaseHelper.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
@@ -99,7 +100,9 @@ list(APPEND GAME_HEADER
      Classes/BossMap.h
      wxsqlite/sqlite3.h
      Classes/MyTabView.h
-     Classes/FirebaseHelper.h
+     Classes/SoundManager.h
+     Classes/GameLibrary.h
+ #    Classes/FirebaseHelper.h
      )
 
 if(ANDROID)

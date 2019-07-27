@@ -2,7 +2,6 @@
 #define __INF_BULLET_PACKAGE_H__
 
 #include "cocos2d.h"
-#include "Constants.h"
 
 USING_NS_CC;
 

@@ -3,7 +3,6 @@
 
 #include "cocos2d.h"
 #include "ControlLayer.h"
-#include "Constants.h"
 #include "Character.h"
 #include "Boss.h"
 #include "BulletPackage.h"

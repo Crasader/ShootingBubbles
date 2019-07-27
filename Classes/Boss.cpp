@@ -1,4 +1,5 @@
 #include "Boss.h"
+#include "GameLibrary.h"
 
 USING_NS_CC;
 

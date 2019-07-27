@@ -2,7 +2,6 @@
 #define __END_LAYER_H__
 
 #include "cocos2d.h"
-#include "Constants.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;

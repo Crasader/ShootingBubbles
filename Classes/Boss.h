@@ -2,7 +2,6 @@
 #define __BOSS_H__
 
 #include "cocos2d.h"
-#include "Constants.h"
 #include "ui/CocosGUI.h"
 #include <cmath>
 #include <vector>

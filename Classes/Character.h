@@ -2,7 +2,6 @@
 #define __CHARACTER_H__
 
 #include "cocos2d.h"
-#include "Constants.h"
 #include <cmath>
 
 USING_NS_CC;

@@ -7,7 +7,6 @@
 #include "Bubble.h"
 #include "BulletPackage.h"
 #include "InfBulletPackage.h"
-#include "Constants.h"
 #include "EndLayer.h"
 #include "Boss.h"
 #include <vector>

@@ -2,7 +2,6 @@
 #define __BUBBLE_H__
 
 #include "cocos2d.h"
-#include "Constants.h"
 #include <cmath>
 #include <vector>
 
