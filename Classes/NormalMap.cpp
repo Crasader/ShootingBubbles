@@ -1,5 +1,5 @@
 #include "NormalMap.h"
-#include "DataManager.h"
+#include "GameLibrary.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;

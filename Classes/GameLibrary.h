@@ -4,5 +4,6 @@
 #include "SoundManager.h"
 #include "Constants.h"
 #include "DataManager.h"
+#include "MyTabView.h"
 
 #endif

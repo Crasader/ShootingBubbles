@@ -1,5 +1,6 @@
 #include "GameLibrary.h"
 #include "SimpleAudioEngine.h"
+#include "GameLibrary.h"
 
 USING_NS_CC;
 

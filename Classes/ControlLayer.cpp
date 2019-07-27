@@ -1,4 +1,5 @@
 #include "ControlLayer.h"
+#include "GameLibrary.h"
 #include <cmath>
 
 USING_NS_CC;

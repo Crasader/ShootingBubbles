@@ -7,7 +7,7 @@
 #include "WindMillMap.h"
 #include "BossMap.h"
 
-#include "DataManager.h"
+#include "GameLibrary.h"
 
 USING_NS_CC;
 

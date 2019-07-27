@@ -1,5 +1,5 @@
 #include "BulletPackage.h"
-
+#include "GameLibrary.h"
 
 BulletPackage::BulletPackage(Node* playLayer, Size size, Vec2 origin){
     this->playLayer = playLayer;

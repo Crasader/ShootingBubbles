@@ -26,7 +26,7 @@
 #include "HelpScene.h"
 #include "MenuScene.h"
 #include "SimpleAudioEngine.h"
-#include "DataManager.h"
+#include "GameLibrary.h"
 
 USING_NS_CC;
 

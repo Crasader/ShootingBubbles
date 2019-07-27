@@ -27,7 +27,7 @@
 #include "Constants.h"
 #include "ui/CocosGUI.h"
 #include "MenuScene.h"
-#include "DataManager.h"
+#include "GameLibrary.h"
 
 Scene* HelpScene::createScene()
 {

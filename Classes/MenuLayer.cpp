@@ -1,10 +1,8 @@
 #include "MenuLayer.h"
-#include "Constants.h"
+#include "GameLibrary.h"
 #include "PlayScene.h"
 #include "HelpScene.h"
-#include "DataManager.h"
 #include "SimpleAudioEngine.h"
-#include "MyTabView.h"
 
 USING_NS_CC;
 
