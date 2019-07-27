@@ -2,7 +2,6 @@
 #include "../../Libs/GameLibrary.h"
 #include "../PlayScene/PlayScene.h"
 #include "../HelpScene/HelpScene.h"
-#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 

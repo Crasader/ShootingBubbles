@@ -55,55 +55,56 @@ include_directories(
 )
 # add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
+
+     Classes/Prefabs/BulletPackage/BulletPackage.cpp
+     Classes/Prefabs/BulletPackage/InfBulletPackage.cpp
+     Classes/Prefabs/Bubble/Bubble.cpp
+     Classes/Prefabs/Boss/Boss.cpp
+     Classes/Prefabs/Character/Character.cpp
      Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
-     Classes/PlayScene.cpp
-     Classes/ControlLayer.cpp
-     Classes/MenuLayer.cpp
-     Classes/NormalMap.cpp
-     Classes/Character.cpp
-     Classes/Bubble.cpp
-     Classes/MenuScene.cpp
-     Classes/BulletPackage.cpp
-     Classes/EndLayer.cpp
-     Classes/DataManager.cpp
-     Classes/Boss.cpp
-     Classes/HelpScene.cpp
-     Classes/InfBulletPackage.cpp
-     Classes/SpeedMap.cpp
-     Classes/WindMillMap.cpp
-     Classes/BossMap.cpp
+     Classes/Scenes/SplashScene/HelloWorldScene.cpp
+     Classes/Scenes/MenuScene/MenuLayer.cpp
+     Classes/Scenes/MenuScene/MenuScene.cpp
+     Classes/Scenes/PlayScene/NormalMap.cpp
+     Classes/Scenes/PlayScene/EndLayer.cpp
+     Classes/Scenes/PlayScene/PlayScene.cpp
+     Classes/Scenes/PlayScene/BossMap.cpp
+     Classes/Scenes/PlayScene/WindMillMap.cpp
+     Classes/Scenes/PlayScene/SpeedMap.cpp
+     Classes/Scenes/HelpScene/HelpScene.cpp
+     Classes/Libs/MyTabView.cpp
+     Classes/Libs/DataManager.cpp
+     #Classes/Libs/FirebaseHelper.cpp
+     Classes/Libs/SoundManager.cpp
+     Classes/Libs/ControlLayer.cpp
      wxsqlite/sqlite3secure.c
-     Classes/MyTabView.cpp
-     Classes/SoundManager.cpp
-#     Classes/FirebaseHelper.cpp
      )
 list(APPEND GAME_HEADER
-     Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
-     Classes/PlayScene.h
-     Classes/ControlLayer.h
-     Classes/MenuLayer.h
-     Classes/NormalMap.h
-     Classes/Character.h
-     Classes/Bubble.h
-     Classes/MenuScene.h
-     Classes/Constants.h
-     Classes/BulletPackage.h
-     Classes/EndLayer.h
-     Classes/DataManager.h
-     Classes/Boss.h
-     Classes/HelpScene.h
-     Classes/InfBulletPackage.h
-     Classes/SpeedMap.h
-     Classes/WindMillMap.h
-     Classes/BossMap.h
-     wxsqlite/sqlite3.h
-     Classes/MyTabView.h
-     Classes/SoundManager.h
-     Classes/GameLibrary.h
- #    Classes/FirebaseHelper.h
-     )
+    Classes/Prefabs/BulletPackage/InfBulletPackage.h
+    Classes/Prefabs/BulletPackage/BulletPackage.h
+    Classes/Prefabs/Bubble/Bubble.h
+    Classes/Prefabs/Boss/Boss.h
+    Classes/Prefabs/Character/Character.h
+    Classes/Scenes/SplashScene/HelloWorldScene.h
+    Classes/Scenes/MenuScene/MenuLayer.h
+    Classes/Scenes/MenuScene/MenuScene.h
+    Classes/Scenes/PlayScene/BossMap.h
+    Classes/Scenes/PlayScene/WindMillMap.h
+    Classes/Scenes/PlayScene/PlayScene.h
+    Classes/Scenes/PlayScene/EndLayer.h
+    Classes/Scenes/PlayScene/NormalMap.h
+    Classes/Scenes/PlayScene/SpeedMap.h
+    Classes/Scenes/HelpScene/HelpScene.h
+    Classes/AppDelegate.h
+    Classes/Libs/ControlLayer.h
+    Classes/Libs/DataManager.h
+    Classes/Libs/MyTabView.h
+    Classes/Libs/SoundManager.h
+    Classes/Libs/GameLibrary.h
+    #Classes/Libs/FirebaseHelper.h
+    Classes/Libs/Constants.h
+    wxsqlite/sqlite3.h
+    )
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml

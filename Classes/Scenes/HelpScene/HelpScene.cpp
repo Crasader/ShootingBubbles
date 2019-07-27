@@ -23,7 +23,6 @@
  ****************************************************************************/
 
 #include "HelpScene.h"
-#include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include "../MenuScene/MenuScene.h"
 #include "../../Libs/GameLibrary.h"

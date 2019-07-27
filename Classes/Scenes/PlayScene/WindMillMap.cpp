@@ -1,6 +1,5 @@
 #include "WindMillMap.h"
 #include "../../Libs/GameLibrary.h"
-#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 

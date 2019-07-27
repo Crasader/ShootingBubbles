@@ -25,7 +25,6 @@
 #include "HelloWorldScene.h"
 #include "../HelpScene/HelpScene.h"
 #include "../MenuScene/MenuScene.h"
-#include "SimpleAudioEngine.h"
 #include "../../Libs/GameLibrary.h"
 
 USING_NS_CC;
