@@ -63,7 +63,7 @@ bool MenuScene::init()
 
     menuLayer = MenuLayer::create();
     this->addChild(menuLayer, 10);
-
+/*
     //Ads
     #if defined(__ANDROID__)
     // Android ad unit IDs.
@@ -86,7 +86,7 @@ bool MenuScene::init()
     stillNotLoadInterstitial = false;
     interstitial_view = new firebase::admob::InterstitialAd();
     interstitial_view->Initialize(getAdParent(), kInterstitialAdUnit);
-
+*/
     this->scheduleUpdate();
 
     return true;
@@ -96,7 +96,7 @@ void MenuScene::update(float delta){
     //Update for bubble
     //Make bubbles goes by the wall
     bubble->update(1.0f);
-
+/*
     // Check that the banner has been initialized.
     if (banner_view->InitializeLastResult().status() == firebase::kFutureStatusComplete
         && banner_view->InitializeLastResult().error() == firebase::admob::kAdMobErrorNone) {
@@ -134,11 +134,11 @@ void MenuScene::update(float delta){
 
             delete dataManager;
         }
-    }
+    }*/
 }
 
 void MenuScene::onExitTransitionDidStart(){
-    banner_view->Destroy();
+   // banner_view->Destroy();
 }
 
 void MenuScene::menuCloseCallback(Ref* pSender)

@@ -23,15 +23,13 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "Constants.h"
 #include "HelloWorldScene.h"
-#include "DataManager.h"
-
+##include "GameManager.h"
 #include "base/ZipUtils.h"
-
+/*
 #include "firebase/admob.h"
 #include "firebase/app.h"
-
+*/
 // #define USE_AUDIO_ENGINE 1
 #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -123,7 +121,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     register_all_packages();
-
+/*
     //AdMob
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     firebase::App* app = firebase::App::Create(firebase::AppOptions(), JniHelper::getEnv(), JniHelper::getActivity());
@@ -132,7 +130,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     firebase::App* app = firebase::App::Create(firebase::AppOptions());
         firebase::admob::Initialize(*app, "INSERT_YOUR_ADMOB_IOS_APP_ID");
 #endif
-
+*/
     //Set playing time to 0
     DataManager* dataManager = new DataManager();
     if (dataManager->init()){
@@ -143,17 +141,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     delete dataManager;
 
     //Preloads background music and audio
-    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-
-    audio->setEffectsVolume(Constants::AUDIO_VOLUME);
-    audio->preloadEffect(Constants::SHOOTING_AUDIO.c_str());
-    audio->preloadEffect(Constants::EXPLOSION_AUDIO.c_str());
-    audio->preloadEffect(Constants::DIE_AUDIO.c_str());
-    audio->preloadEffect(Constants::BOSS_SHOOTING_AUDIO.c_str());
-    audio->preloadEffect(Constants::ITEM_PICKUP_AUDIO.c_str());
-    audio->preloadEffect(Constants::BUTTON_CLICK_AUDIO.c_str());
-
-    audio->preloadBackgroundMusic(Constants::BACKGROUND_MUSIC.c_str());
+    SoundManager::init();
 
     //Texture Atlas
     ZipUtils::setPvrEncryptionKey(0x0bc352a2, 0x1fcafa84, 0xfb06dbaf, 0x44869a85);

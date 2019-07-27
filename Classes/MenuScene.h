@@ -27,7 +27,7 @@
 #include "cocos2d.h"
 #include "MenuLayer.h"
 #include "Bubble.h"
-
+/*
 #include "FirebaseHelper.h"
 
 #include "firebase/admob.h"
@@ -42,7 +42,7 @@
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #endif
-
+*/
 class MenuScene : public cocos2d::Scene
 {
 public:
@@ -66,10 +66,10 @@ private:
 
     Size size;
     Vec2 origin;
-
+/*
     firebase::admob::BannerView* banner_view;
     firebase::admob::InterstitialAd* interstitial_view;
-
+*/
     bool stillNotLoadInterstitial;
 
 };
